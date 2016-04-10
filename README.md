@@ -1,4 +1,4 @@
-# SAT solver glusoce
+# SAT solver glucose
 
 ## Directory overview:
 
