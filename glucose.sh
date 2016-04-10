@@ -7,11 +7,11 @@ fi
 
 
 # to set in evaluation environment
-mypath=.
+#mypath=.
 
 # To set in a normal envirnement
-#mypath=.
-#TMPDIR=/tmp
+mypath=.
+TMPDIR=/tmp
 
 TMP=$TMPDIR/glucose_$$ #set this to the location of temporary files
 SE=$mypath/SatELite_release           #set this to the executable of SatELite
@@ -28,7 +28,7 @@ echo "c Starting glucose"
 echo "c"
 if [ $X == 0 ]; then
   #SatElite terminated correctly
-    $RS $TMP.cnf -verbosity=0 $TMP.result "$@" 
+    $RS $TMP.cnf $TMP.result "$@" 
     #more $TMP.result
   X=$?
   if [ $X == 20 ]; then
@@ -46,7 +46,7 @@ if [ $X == 0 ]; then
   X=$?
 elif [ $X == 11 ]; then
   #SatElite died, glucose must take care of the rest
-    $RS $INPUT -verbosity=0 #but we must force glucose to print out result here!!!
+    $RS $INPUT #but we must force glucose to print out result here!!!
   X=$?
 elif [ $X == 12 ]; then
   #SatElite prints out usage message
