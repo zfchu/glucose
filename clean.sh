@@ -8,4 +8,5 @@ make clean
 
 cd ../../glucose/core
 make clean 
- 
+
+find . -name 'depend.mak' -delete 

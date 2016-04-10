@@ -1,7 +1,7 @@
 #!/bin/bash
-export FM=$PWD/sources/SatElite/ForMani
+export FM=$PWD/sources/SatELite/ForMani
 
-cd sources/SatElite/SatELite
+cd sources/SatELite/SatELite
 make r
 cp SatELite_release ../../..
 
