@@ -33,17 +33,17 @@ lib:	lib$(LIB).a
 libd:	lib$(LIB)d.a
 
 ## Compile options
-%.o:			CFLAGS +=-m32 $(COPTIMIZE) -ggdb -D DEBUG
-%.op:			CFLAGS +=-m32 $(COPTIMIZE) -pg -ggdb -D NDEBUG
-%.od:			CFLAGS +=-m32 -O0 -ggdb -D DEBUG # -D INVARIANTS
-%.or:			CFLAGS +=-m32 $(COPTIMIZE) -D NDEBUG
+%.o:			CFLAGS +=-m64 $(COPTIMIZE) -ggdb -D DEBUG
+%.op:			CFLAGS +=-m64 $(COPTIMIZE) -pg -ggdb -D NDEBUG
+%.od:			CFLAGS +=-m64 -O0 -ggdb -D DEBUG # -D INVARIANTS
+%.or:			CFLAGS +=-m64 $(COPTIMIZE) -D NDEBUG
 
 ## Link options
-$(EXEC):		LFLAGS := -m32 -ggdb $(LFLAGS)
-$(EXEC)_profile:	LFLAGS := -m32 -ggdb -pg $(LFLAGS)
-$(EXEC)_debug:		LFLAGS := -m32 -ggdb $(LFLAGS)
-$(EXEC)_release:	LFLAGS := -m32 $(LFLAGS)
-$(EXEC)_static:		LFLAGS := -m32 --static $(LFLAGS)
+$(EXEC):		LFLAGS := -m64 -ggdb $(LFLAGS)
+$(EXEC)_profile:	LFLAGS := -m64 -ggdb -pg $(LFLAGS)
+$(EXEC)_debug:		LFLAGS := -m64 -ggdb $(LFLAGS)
+$(EXEC)_release:	LFLAGS := -m64 $(LFLAGS)
+$(EXEC)_static:		LFLAGS := -m64 --static $(LFLAGS)
 
 ## Dependencies
 $(EXEC):		$(COBJS)

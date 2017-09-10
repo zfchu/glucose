@@ -388,12 +388,12 @@ static void SIGINT_signalHandler(int signum) {
 
 void printStats(SolverStats& stats, double cpu_time)
 {
-    reportf("starts                : %8"I64_fmt"\n", stats.starts);
-    reportf("conflicts             : %8"I64_fmt"   (%.0f /sec)\n", stats.conflicts   , stats.conflicts   /cpu_time);
-    reportf("reduce learnts        : %8"I64_fmt"   (%.0f /sec)\n", stats.reduceDBs   , stats.reduceDBs   /cpu_time);
-    reportf("decisions             : %8"I64_fmt"   (%.0f /sec)\n", stats.decisions   , stats.decisions   /cpu_time);
-    reportf("propagations          : %8"I64_fmt"   (%.0f /sec)\n", stats.propagations, stats.propagations/cpu_time);
-    reportf("inspects              : %8"I64_fmt"   (%.0f /sec)\n", stats.inspects    , stats.inspects    /cpu_time);
+    reportf("starts                : %8" I64_fmt "\n", stats.starts);
+    reportf("conflicts             : %8" I64_fmt "   (%.0f /sec)\n", stats.conflicts   , stats.conflicts   /cpu_time);
+    reportf("reduce learnts        : %8" I64_fmt "   (%.0f /sec)\n", stats.reduceDBs   , stats.reduceDBs   /cpu_time);
+    reportf("decisions             : %8" I64_fmt "   (%.0f /sec)\n", stats.decisions   , stats.decisions   /cpu_time);
+    reportf("propagations          : %8" I64_fmt "   (%.0f /sec)\n", stats.propagations, stats.propagations/cpu_time);
+    reportf("inspects              : %8" I64_fmt "   (%.0f /sec)\n", stats.inspects    , stats.inspects    /cpu_time);
     reportf("memory used           : %8g MB\n", memUsed() / (1024*1024.0));
     reportf("CPU time              : %8g s\n", cpu_time);
     if (tsum() != 0.0)

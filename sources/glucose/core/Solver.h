@@ -250,7 +250,7 @@ inline void Solver::claBumpActivity (Clause& c) {  // LS
             // Rescale:
             for (int i = 0; i < learnts.size(); i++)
                 learnts[i]->oldActivity() *= 1e-20;
-		cla_inc *= 1e-20; } }
+	    cla_inc *= 1e-20; } }
 
 inline bool     Solver::enqueue         (Lit p, Clause* from)   { return value(p) != l_Undef ? value(p) != l_False : (uncheckedEnqueue(p, from), true); }
 inline bool     Solver::locked          (const Clause& c) const { return reason[var(c[0])] == &c && value(c[0]) == l_True; }

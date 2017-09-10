@@ -81,7 +81,7 @@ void Solver::setVars(int n_vars)
 // Returns FALSE if immediate conflict.
 bool Solver::assume(Lit p) {
     assert(propQ.size() == 0);
-    if (verbosity >= 2) reportf(L_IND"assume("L_LIT")\n", L_ind, L_lit(p));
+    if (verbosity >= 2) reportf(L_IND "assume(" L_LIT ")\n", L_ind, L_lit(p));
     trail_lim.push(trail.size());
     return enqueue(p); }
 
@@ -90,7 +90,7 @@ bool Solver::assume(Lit p) {
 //
 inline void Solver::undoOne(void)
 {
-    if (verbosity >= 2){ Lit p = trail.last(); reportf(L_IND"unbind("L_LIT")\n", L_ind, L_lit(p)); }
+    if (verbosity >= 2){ Lit p = trail.last(); reportf(L_IND "unbind(" L_LIT ")\n", L_ind, L_lit(p)); }
     Lit     p  = trail.last(); trail.pop();
     Var     x  = var(p);
     assigns[x] = toInt(l_Undef);
@@ -105,7 +105,7 @@ inline void Solver::undoOne(void)
 void Solver::cancel(void)
 {
     assert(propQ.size() == 0);
-    if (verbosity >= 2){ if (trail.size() != trail_lim.last()){ Lit p = trail[trail_lim.last()]; reportf(L_IND"cancel("L_LIT")\n", L_ind, L_lit(p)); } }
+    if (verbosity >= 2){ if (trail.size() != trail_lim.last()){ Lit p = trail[trail_lim.last()]; reportf(L_IND "cancel(" L_LIT ")\n", L_ind, L_lit(p)); } }
     for (int c = trail.size() - trail_lim.last(); c != 0; c--)
         undoOne();
     trail_lim.pop();
@@ -336,8 +336,8 @@ void Solver::analyze(Clause confl, vec<Lit>& out_learnt, int& out_btlevel)
     for (int j = 0; j < to_clear.size(); j++) seen[to_clear[j]] = 0;    // ('seen[]' is now cleared)
 
     if (verbosity >= 2){
-        reportf(L_IND"Learnt {", L_ind);
-        for (int i = 0; i < out_learnt.size(); i++) reportf(" "L_LIT, L_lit(out_learnt[i]));
+        reportf(L_IND "Learnt {", L_ind);
+        for (int i = 0; i < out_learnt.size(); i++) reportf(" " L_LIT, L_lit(out_learnt[i]));
         reportf(" } at level %d\n", out_btlevel); }
 }
 
@@ -380,7 +380,7 @@ bool Solver::enqueue(Lit p, Clause from)
     }else{
         // New fact -- store it.
       #ifndef RELEASE
-        if (verbosity >= 2) reportf(L_IND"bind("L_LIT")\n", L_ind, L_lit(p));
+        if (verbosity >= 2) reportf(L_IND "bind(" L_LIT ")\n", L_ind, L_lit(p));
       #endif
         assigns[var(p)] = toInt(lbool(!sign(p)));
         level  [var(p)] = decisionLevel();
@@ -744,7 +744,7 @@ lbool Solver::search(int nof_conflicts, int nof_learnts, const SearchParams& par
         if (!confl.null()){
             // CONFLICT
 
-            if (verbosity >= 2) reportf(L_IND"**CONFLICT**\n", L_ind);
+            if (verbosity >= 2) reportf(L_IND "**CONFLICT**\n", L_ind);
             stats.conflicts++; conflictC++;
             vec<Lit>    learnt_clause;
             int         backtrack_level;
