@@ -658,14 +658,14 @@ void Solver::analyze(CRef confl, vec<Lit>& out_learnt,vec<Lit>&selectors, int& o
       szWithoutSelectors = out_learnt.size();
     
     // Compute LBD
-    lbd = computeLBD(out_learnt,out_learnt.size()-selectors.size());
+    lbd = out_learnt.size()-selectors.size(); // computeLBD(out_learnt,out_learnt.size()-selectors.size());
 
   
 #ifdef UPDATEVARACTIVITY
   // UPDATEVARACTIVITY trick (see competition'09 companion paper)
   if(lastDecisionLevel.size()>0) {
     for(int i = 0;i<lastDecisionLevel.size();i++) {
-      if(ca[reason(var(lastDecisionLevel[i]))].lbd()<lbd)
+      if(ca[reason(var(lastDecisionLevel[i]))].size()<lbd)
 	varBumpActivity(var(lastDecisionLevel[i]));
     }
     lastDecisionLevel.clear();
