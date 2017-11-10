@@ -665,8 +665,7 @@ void Solver::analyze(CRef confl, vec<Lit>& out_learnt,vec<Lit>&selectors, int& o
   // UPDATEVARACTIVITY trick (see competition'09 companion paper)
   if(lastDecisionLevel.size()>0) {
     for(int i = 0;i<lastDecisionLevel.size();i++) {
-      if(ca[reason(var(lastDecisionLevel[i]))].lbd()<lbd)
-	varBumpActivity(var(lastDecisionLevel[i]));
+      varBumpActivity(var(lastDecisionLevel[i]));
     }
     lastDecisionLevel.clear();
   } 
