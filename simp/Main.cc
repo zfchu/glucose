@@ -110,9 +110,12 @@ int main(int argc, char** argv)
         StringOption dimacs ("MAIN", "dimacs", "If given, stop after preprocessing and write the result to this file.");
         IntOption    cpu_lim("MAIN", "cpu-lim","Limit on CPU time allowed in seconds.\n", INT32_MAX, IntRange(0, INT32_MAX));
         IntOption    mem_lim("MAIN", "mem-lim","Limit on memory usage in megabytes.\n", INT32_MAX, IntRange(0, INT32_MAX));
+        BoolOption   version("MAIN", "-version","Show version.", false);
 
         parseOptions(argc, argv, true);
         
+	if (version) { printf("Glucose-3.0\n"); exit(0); }
+
         SimpSolver  S;
         double      initial_time = cpuTime();
 
