@@ -272,8 +272,8 @@ void Solver::attachClause(CRef cr) {
       watchesBin[~c[0]].push(Watcher(cr, c[1]));
       watchesBin[~c[1]].push(Watcher(cr, c[0]));
     } else {
-      watches[~c[0]].push(Watcher(cr, c[1]));
-      watches[~c[1]].push(Watcher(cr, c[0]));
+      watches[~c[0]].push(Watcher(cr, lit_Undef));
+      watches[~c[1]].push(Watcher(cr, lit_Undef));
     }
     if (c.learnt()) learnts_literals += c.size();
     else            clauses_literals += c.size(); }
@@ -812,7 +812,7 @@ CRef Solver::propagate()
         for (i = j = (Watcher*)ws, end = i + ws.size();  i != end;){
             // Try to avoid inspecting the clause:
             Lit blocker = i->blocker;
-            if (value(blocker) == l_True){
+            if (blocker != lit_Undef && value(blocker) == l_True){
                 *j++ = *i++; continue; }
 
             // Make sure the false literal is data[1]:

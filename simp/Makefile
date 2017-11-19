@@ -1,4 +1,4 @@
-EXEC = glucose
+EXEC = glucose_nib
 DEPDIR    = mtl utils core
 MROOT = $(PWD)/..
 
