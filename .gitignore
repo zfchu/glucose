@@ -1,5 +1,5 @@
 simp/depend.mk
-simp/glucose
+simp/glucose-*
 sources
 SatELite_release
 
