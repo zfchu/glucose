@@ -302,7 +302,7 @@ protected:
 
     // Operations on clauses:
     //
-    void     attachClause     (CRef cr);               // Attach a clause to watcher lists.
+    void     attachClause     (CRef cr, int learnt = 0);      // Attach a clause to watcher lists.
     void     detachClause     (CRef cr, bool strict = false); // Detach a clause to watcher lists.
     void     removeClause     (CRef cr);               // Detach and free a clause.
     bool     locked           (const Clause& c) const; // Returns TRUE if a clause is a reason for some implication in the current state.

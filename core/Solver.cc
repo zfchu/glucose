@@ -264,7 +264,7 @@ bool Solver::addClause_(vec<Lit>& ps)
 }
 
 
-void Solver::attachClause(CRef cr) {
+void Solver::attachClause(CRef cr, int learnt) {
     const Clause& c = ca[cr];
 
     assert(c.size() > 1);
@@ -272,8 +272,8 @@ void Solver::attachClause(CRef cr) {
       watchesBin[~c[0]].push(Watcher(cr, c[1]));
       watchesBin[~c[1]].push(Watcher(cr, c[0]));
     } else {
-      watches[~c[0]].push(Watcher(cr, lit_Undef));
-      watches[~c[1]].push(Watcher(cr, lit_Undef));
+      watches[~c[0]].push(Watcher(cr, learnt ? c[1] : lit_Undef));
+      watches[~c[1]].push(Watcher(cr, learnt ? c[0] : lit_Undef));
     }
     if (c.learnt()) learnts_literals += c.size();
     else            clauses_literals += c.size(); }
@@ -1089,7 +1089,7 @@ lbool Solver::search(int nof_conflicts)
 		if(nblevels<=2) nbDL2++; // stats
 		if(ca[cr].size()==2) nbBin++; // stats
                 learnts.push(cr);
-                attachClause(cr);
+                attachClause(cr,1);
 
                 claBumpActivity(ca[cr]);
                 uncheckedEnqueue(learnt_clause[0], cr);
