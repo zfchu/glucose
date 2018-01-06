@@ -6,6 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
    url = "https://github.com/shnarazk/glucose/archive/version3.0.tar.gz";
+   sha256 = "c4645d64715493547f576b0d23c73aa72bddfe73c9aa002bad8fd3da6c5ed803";
   };
   buildInputs = [ zlib ];
 
