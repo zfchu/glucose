@@ -173,6 +173,7 @@ public:
     uint64_t dec_vars, clauses_literals, learnts_literals, max_literals, tot_literals;
 
 protected:
+    uint64_t nextRestart;
     long curRestart;
     // Helper structures:
     //

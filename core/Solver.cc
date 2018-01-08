@@ -117,6 +117,7 @@ Solver::Solver() :
   ,  nbRemovedClauses(0),nbReducedClauses(0), nbDL2(0),nbBin(0),nbUn(0) , nbReduceDB(0)
     , solves(0), starts(0), decisions(0), rnd_decisions(0), propagations(0),conflicts(0),conflictsRestarts(0),nbstopsrestarts(0),nbstopsrestartssame(0),lastblockatrestart(0)
   , dec_vars(0), clauses_literals(0), learnts_literals(0), max_literals(0), tot_literals(0)
+    , nextRestart(0)
     , curRestart(1)
 
   , ok                 (true)
@@ -1057,9 +1058,10 @@ lbool Solver::search(int nof_conflicts)
 	  
 	  trailQueue.push(trail.size());
 	  // BLOCK RESTART (CP 2012 paper)
-	  if( conflictsRestarts>LOWER_BOUND_FOR_BLOCKING_RESTART && lbdQueue.isvalid()  && trail.size()>R*trailQueue.getavg()) {
+	  if(nextRestart <= conflicts && conflictsRestarts>LOWER_BOUND_FOR_BLOCKING_RESTART && lbdQueue.isvalid()  && trail.size()>R*trailQueue.getavg()) {
 	    lbdQueue.fastclear();
 	    nbstopsrestarts++;
+	    nextRestart = conflicts + 50 + nbstopsrestarts;
 	    if(!blocked) {lastblockatrestart=starts;nbstopsrestartssame++;blocked=true;}
 	  }
 
@@ -1099,10 +1101,12 @@ lbool Solver::search(int nof_conflicts)
 
            
         }else{
-	  // Our dynamic restart, see the SAT09 competition compagnion paper 
+	  // Our dynamic restart, see the SAT09 competition compagnion paper : FORCING RESTART
 	  if (
-	      ( lbdQueue.isvalid() && ((lbdQueue.getavg()*K) > (sumLBD / conflictsRestarts)))) {
+	      (nextRestart <= conflicts && lbdQueue.isvalid() && ((lbdQueue.getavg()*K) > (sumLBD / conflictsRestarts)))) {
 	    lbdQueue.fastclear();
+	    nextRestart = conflicts + 50 + starts;  // starts is incremented at the head of this function
+	    // printf("restart: conflict:%d, nextRestart:%d, conflictsRestarts:%d\n", conflicts, nextRestart, conflictsRestarts);
 	    progress_estimate = progressEstimate();
 	    int bt = 0;
 	    if(incremental) { // DO NOT BACKTRACK UNTIL 0.. USELESS
