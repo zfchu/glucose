@@ -1062,7 +1062,7 @@ lbool Solver::search(int nof_conflicts)
 	    lbdQueue.fastclear();
 	    nbstopsrestarts++;
 	    // nextRestart = conflicts + 50 + nbstopsrestarts;
-	    nextRestart = conflicts + 50 + pow(1.1, nbstopsrestarts);
+	    nextRestart = conflicts + 50 + pow(1.4, nbstopsrestarts);
 	    if(!blocked) {lastblockatrestart=starts;nbstopsrestartssame++;blocked=true;}
 	  }
 
@@ -1107,7 +1107,7 @@ lbool Solver::search(int nof_conflicts)
 	      (nextRestart <= conflicts && lbdQueue.isvalid() && ((lbdQueue.getavg()*K) > (sumLBD / conflictsRestarts)))) {
 	    lbdQueue.fastclear();
 	    // nextRestart = conflicts + 50 + starts;  // starts is incremented at the head of this function
-	    nextRestart = conflicts + 50 * pow(1.1, starts);
+	    nextRestart = conflicts + 50 * pow(1.4, starts);
 	    // printf("restart: conflict:%d, nextRestart:%d, conflictsRestarts:%d\n", conflicts, nextRestart, conflictsRestarts);
 	    progress_estimate = progressEstimate();
 	    int bt = 0;
