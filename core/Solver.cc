@@ -909,7 +909,7 @@ struct reduceDB_lt {
     
     // Second one  based on clause size instead of literal block distance
     if(ca[x].lbd()> ca[y].size()) return 1;
-    if(ca[x].lbd()< ca[y].size()) return 0;    
+    if(ca[x].lbd()< ca[y].size()) return 0;
     
     
     // Finally we can use old activity or size, we choose the last one
