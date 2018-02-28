@@ -925,6 +925,8 @@ void Solver::reduceDB()
  
   int     i, j;
   nbReduceDB++;
+
+  // updateNDD();
   sort(learnts, reduceDB_lt(ca));
 
   // We have a lot of "good" clauses, it is difficult to compare them. Keep more !
@@ -1414,4 +1416,21 @@ void Solver::garbageCollect()
         printf("|  Garbage collection:   %12d bytes => %12d bytes             |\n", 
                ca.size()*ClauseAllocator::Unit_Size, to.size()*ClauseAllocator::Unit_Size);
     to.moveTo(ca);
+}
+
+void Solver::updateNDD()
+{
+  int e = trail.size()-1;
+  for (int i = 0; i < e; i++) {
+    Var x  = var(trail[i]);
+    CRef c = vardata[x].reason;
+    if (c != CRef_Undef || 1)
+      vardata[x].depends = vardata[x].level % 64;
+    else {
+      Clause& cls = ca[c];
+      vardata[x].depends = 0;
+      for (int j = 0; j < cls.size(); j++)
+	vardata[x].depends |= vardata[var(cls[j])].depends;
+    }
+  }
 }

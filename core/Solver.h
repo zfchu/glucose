@@ -176,7 +176,7 @@ protected:
     long curRestart;
     // Helper structures:
     //
-    struct VarData { CRef reason; int level; int depends; };
+    struct VarData { CRef reason; int level; unsigned int depends; };
     static inline VarData mkVarData(CRef cr, int l){ VarData d = {cr, l, 0}; return d; }
 
     struct Watcher {
@@ -344,6 +344,8 @@ protected:
   double backedLevel = 0;
   double cl_cal = 0;
   double bl_cal = 0;
+
+  void updateNDD();
 };
 
 
