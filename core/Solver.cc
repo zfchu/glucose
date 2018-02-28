@@ -350,7 +350,7 @@ inline unsigned int Solver::computeLBD(const vec<Lit> & lits,int end) {
     if(end==-1) end = lits.size();
     unsigned int nbDone = 0;
     for(int i=0;i<lits.size();i++) {
-      if(nbDone>=end) break;
+      if(nbDone>=(unsigned int) end) break;
       if(isSelector(var(lits[i]))) continue;
       nbDone++;
       int l = level(var(lits[i]));
@@ -377,7 +377,7 @@ inline unsigned int Solver::computeLBD(const Clause &c) {
   MYFLAG++;
 
   if(incremental) { // ----------------- INCREMENTAL MODE
-     int nbDone = 0;
+     unsigned int nbDone = 0;
     for(int i=0;i<c.size();i++) {
       if(nbDone>=c.sizeWithoutSelectors()) break;
       if(isSelector(var(c[i]))) continue;
@@ -1117,7 +1117,7 @@ lbool Solver::search(int nof_conflicts)
 	    return l_False;
 	  }
 	    // Perform clause database reduction !
-	    if(conflicts>=curRestart* nbclausesbeforereduce) 
+	  if(conflicts>=(uint64_t) curRestart* nbclausesbeforereduce)
 	      {
 	
 		assert(learnts.size()>0);
@@ -1179,16 +1179,16 @@ double Solver::progressEstimate() const
 void Solver::printIncrementalStats() {
 
   printf("c---------- Glucose Stats -------------------------\n");
-  printf("c restarts              : %lld\n", starts);
-  printf("c nb ReduceDB           : %lld\n", nbReduceDB);
-  printf("c nb removed Clauses    : %lld\n",nbRemovedClauses);
-  printf("c nb learnts DL2        : %lld\n", nbDL2);
-  printf("c nb learnts size 2     : %lld\n", nbBin);
-  printf("c nb learnts size 1     : %lld\n", nbUn);
+  printf("c restarts              : %ld\n", starts);
+  printf("c nb ReduceDB           : %ld\n", nbReduceDB);
+  printf("c nb removed Clauses    : %ld\n",nbRemovedClauses);
+  printf("c nb learnts DL2        : %ld\n", nbDL2);
+  printf("c nb learnts size 2     : %ld\n", nbBin);
+  printf("c nb learnts size 1     : %ld\n", nbUn);
 
-  printf("c conflicts             : %lld \n",conflicts);
-  printf("c decisions             : %lld\n",decisions);
-  printf("c propagations          : %lld\n",propagations);
+  printf("c conflicts             : %ld \n",conflicts);
+  printf("c decisions             : %ld\n",decisions);
+  printf("c propagations          : %ld\n",propagations);
 
   printf("c SAT Calls             : %d in %g seconds\n",nbSatCalls,totalTime4Sat);
   printf("c UNSAT Calls           : %d in %g seconds\n",nbUnsatCalls,totalTime4Unsat);

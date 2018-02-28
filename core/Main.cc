@@ -50,11 +50,11 @@ void printStats(Solver& solver)
     printf("c restarts              : %"PRIu64" (%"PRIu64" conflicts in avg)\n", solver.starts,(solver.starts>0 ?solver.conflicts/solver.starts : 0));
     printf("c blocked restarts      : %"PRIu64" (multiple: %"PRIu64") \n", solver.nbstopsrestarts,solver.nbstopsrestartssame);
     printf("c last block at restart : %"PRIu64"\n",solver.lastblockatrestart);
-    printf("c nb ReduceDB           : %lld\n", solver.nbReduceDB);
-    printf("c nb removed Clauses    : %lld\n",solver.nbRemovedClauses);
-    printf("c nb learnts DL2        : %lld\n", solver.nbDL2);
-    printf("c nb learnts size 2     : %lld\n", solver.nbBin);
-    printf("c nb learnts size 1     : %lld\n", solver.nbUn);
+    printf("c nb ReduceDB           : %ld\n", solver.nbReduceDB);
+    printf("c nb removed Clauses    : %ld\n",solver.nbRemovedClauses);
+    printf("c nb learnts DL2        : %ld\n", solver.nbDL2);
+    printf("c nb learnts size 2     : %ld\n", solver.nbBin);
+    printf("c nb learnts size 1     : %ld\n", solver.nbUn);
 
     printf("c conflicts             : %-12"PRIu64"   (%.0f /sec)\n", solver.conflicts   , solver.conflicts   /cpu_time);
     printf("c decisions             : %-12"PRIu64"   (%4.2f %% random) (%.0f /sec)\n", solver.decisions, (float)solver.rnd_decisions*100 / (float)solver.decisions, solver.decisions   /cpu_time);
