@@ -1056,6 +1056,7 @@ lbool Solver::search(int nof_conflicts)
 	    return l_False;
 	    
 	  }
+	  updateEMA(conflictLevel, (double) decisionLevel());
 	  
 	  trailQueue.push(trail.size());
 	  // BLOCK RESTART (CP 2012 paper)
@@ -1110,6 +1111,7 @@ lbool Solver::search(int nof_conflicts)
 	    if(incremental) { // DO NOT BACKTRACK UNTIL 0.. USELESS
 	      bt = (decisionLevel()<assumptions.size()) ? decisionLevel() : assumptions.size();
 	    }
+	    updateEMA(conflictLevel, (double) bt);
 	    cancelUntil(bt);
 	    return l_Undef; }
 

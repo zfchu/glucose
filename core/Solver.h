@@ -200,6 +200,7 @@ protected:
         VarOrderLt(const vec<double>&  act) : activity(act) { }
     };
 
+    struct EMA { double value; double calibrator; double rate; };
 
     // Solver state:
     //
@@ -340,10 +341,19 @@ protected:
         return (int)(drand(seed) * size); }
 
   // 2018-02-NDD-altitude
-  double conflictLevel = 0;
-  double backedLevel = 0;
-  double cl_cal = 0;
-  double bl_cal = 0;
+  struct EMA conflictLevel = { 0, 0, 0.1 };
+  struct EMA backedLevel = { 0, 0, 0.1 };
+  inline double updateEMA(EMA d, double x)
+  {
+    d.value = d.rate * x + (1 - d.rate) * d.value;
+    d.calibrator = d.rate + (1 - d.rate) * d.calibrator;
+    return d.value / d.calibrator;
+  }
+
+  inline double getEMA(EMA d)
+  {
+    return d.value / d.calibrator;
+  }
 
   void updateNDD();
 };
