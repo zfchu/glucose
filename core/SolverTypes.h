@@ -134,10 +134,11 @@ class Clause {
       unsigned learnt    : 1;
       unsigned has_extra : 1;
       unsigned reloced   : 1;
-      unsigned lbd       : 26;
+      unsigned lbd       : 18;          // 26 (-8)
+      unsigned ndd       : 12;
       unsigned canbedel  : 1;
-      unsigned size      : 32;
-      unsigned szWithoutSelectors : 32;
+      unsigned size      : 30;	        // 32(-2)
+      unsigned szWithoutSelectors : 30; // 32(-2)
 
     }                            header;
     union { Lit lit; float act; uint32_t abs; CRef rel; } data[0];
@@ -153,6 +154,7 @@ class Clause {
         header.reloced   = 0;
         header.size      = ps.size();
 	header.lbd = 0;
+	header.ndd = 0;
 	header.canbedel = 1;
         for (int i = 0; i < ps.size(); i++) 
             data[i].lit = ps[i];
@@ -198,8 +200,10 @@ public:
     Lit          subsumes    (const Clause& other) const;
     void         strengthen  (Lit p);
     void         setLBD(int i)  {header.lbd = i;} 
+    void         setNDD(int i)  {header.ndd = i;}
     // unsigned int&       lbd    ()              { return header.lbd; }
     unsigned int        lbd    () const        { return header.lbd; }
+    unsigned int        ndd    () const        { return header.ndd; }
     void setCanBeDel(bool b) {header.canbedel = b;}
     bool canBeDel() {return header.canbedel;}
     void setSizeWithoutSelectors   (unsigned int n)              {header.szWithoutSelectors = n; }

@@ -311,6 +311,7 @@ protected:
 
     unsigned int computeLBD(const vec<Lit> & lits,int end=-1);
     unsigned int computeLBD(const Clause &c);
+    unsigned int computeNDD(const Clause &c);
     void minimisationWithBinaryResolution(vec<Lit> &out_learnt);
 
     void     relocAll         (ClauseAllocator& to);

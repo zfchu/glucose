@@ -400,6 +400,15 @@ inline unsigned int Solver::computeLBD(const Clause &c) {
   return nblevels;
 }
 
+inline unsigned int Solver::computeNDD(const Clause &c) {
+  int a = 0;
+  for (int i = 0; i < c.size(); i ++) {
+    Lit l = c[i];
+    unsigned int bits = vardata[var(l)].depends;
+    for (int j = 0; j < 64; i++) a += (bits & 1 << j) ? 1 : 0;
+  }
+  return a;
+}
 
 /******************************************************************
  * Minimisation with binary reolution
@@ -900,7 +909,27 @@ struct reduceDB_lt {
     ClauseAllocator& ca;
     reduceDB_lt(ClauseAllocator& ca_) : ca(ca_) {}
     bool operator () (CRef x, CRef y) { 
- 
+
+    int xd = ca[x].lbd();
+    int yd = ca[y].lbd();
+    int xn = ca[x].ndd();
+    int yn = ca[y].ndd();
+    int xs = ca[x].size();
+    int ys = ca[y].size();
+    double xa = ca[x].activity();
+    double ya = ca[y].activity();
+    double fillRate = 0.5;
+    double xc = pow(xd, fillRate) * pow((double)xn, fillRate);
+    double yc = pow(yd, fillRate) * pow((double)yn, fillRate);
+
+    if(xs > 2 && ys ==2) return 1;  //     if(ca[x].size()> 2 && ca[y].size()==2) return 1;
+    if(ys > 2 && xs ==2) return 0;  //     if(ca[y].size()>2 && ca[x].size()==2) return 0;
+    if(xs == 2 && ys ==2) return 0; //     if(ca[x].size()==2 && ca[y].size()==2) return 0;
+    if(xd > yd) return 1;	    //     if(ca[x].lbd()> ca[y].lbd()) return 1;
+    if(xd < yd) return 0;	    //     if(ca[x].size()==2 && ca[y].size()==2) return 0;
+    return xa < ya;		    //     return ca[x].activity() < ca[y].activity();
+
+    /*
     // Main criteria... Like in MiniSat we keep all binary clauses
     if(ca[x].size()> 2 && ca[y].size()==2) return 1;
     
@@ -917,6 +946,7 @@ struct reduceDB_lt {
 	//return x->size() < y->size();
 
         //return ca[x].size() > 2 && (ca[y].size() == 2 || ca[x].activity() < ca[y].activity()); } 
+    */
     }    
 };
 
