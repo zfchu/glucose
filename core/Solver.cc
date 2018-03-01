@@ -405,7 +405,7 @@ inline unsigned int Solver::computeNDD(const Clause &c) {
   for (int i = 0; i < c.size(); i ++) {
     Lit l = c[i];
     unsigned int bits = vardata[var(l)].depends;
-    for (int j = 0; j < 64; i++) a += (bits & 1 << j) ? 1 : 0;
+    for (int j = 0; j < 64; j++) a += (bits & 1 << j) ? 1 : 0;
   }
   return a;
 }
@@ -550,6 +550,7 @@ void Solver::analyze(CRef confl, vec<Lit>& out_learnt,vec<Lit>&selectors, int& o
 	    // seems to be interesting : keep it for the next round
 	    c.setLBD(nblevels); // Update it
 	  }
+	  c.setNDD(computeNDD(c));
 	}
 #endif
 
@@ -1117,7 +1118,8 @@ lbool Solver::search(int nof_conflicts)
 	      uncheckedEnqueue(learnt_clause[0]);nbUn++;
             }else{
                 CRef cr = ca.alloc(learnt_clause, true);
-		ca[cr].setLBD(nblevels); 
+		ca[cr].setLBD(nblevels);
+		ca[cr].setNDD(computeLBD(ca[cr]));
 		ca[cr].setSizeWithoutSelectors(szWoutSelectors);
 		if(nblevels<=2) nbDL2++; // stats
 		if(ca[cr].size()==2) nbBin++; // stats
