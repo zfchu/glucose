@@ -342,16 +342,17 @@ protected:
         return (int)(drand(seed) * size); }
 
   // 2018-02-NDD-altitude
-  struct EMA conflictLevel = { 0, 0, 0.1 };
-  struct EMA backedLevel = { 0, 0, 0.1 };
-  inline double updateEMA(EMA d, double x)
+  struct EMA conflictLevel = { 0, 0, (double) 1/ (double) 16384.0 };
+  struct EMA backedLevel   = { 0, 0, (double) 1/ (double) 16384.0 };
+  inline double updateEMA(struct EMA &d, double x)
   {
     d.value = d.rate * x + (1 - d.rate) * d.value;
     d.calibrator = d.rate + (1 - d.rate) * d.calibrator;
+    //printf("##### %lf => (%lf, %lf)\n", x, d.value, d.calibrator);
     return d.value / d.calibrator;
   }
 
-  inline double getEMA(EMA d)
+  inline double getEMA(struct EMA d)
   {
     return d.value / d.calibrator;
   }

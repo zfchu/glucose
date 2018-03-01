@@ -46,7 +46,7 @@ static const char* _cm = "CORE -- MINIMIZE";
 static const char* _certified = "CORE -- CERTIFIED UNSAT";
 
 
-
+static double fillRate;
 
 static BoolOption opt_incremental (_cat,"incremental", "Use incremental SAT solving",false);
 static DoubleOption opt_K                 (_cr, "K",           "The constant used to force restart",            0.8,     DoubleRange(0, false, 1, false));           
@@ -922,7 +922,6 @@ struct reduceDB_lt {
     int yd = ca[y].lbd();
     int xn = ca[x].ndd();
     int yn = ca[y].ndd();
-    double fillRate = 0.5;
     double xc = pow(xd, fillRate) * pow((double)xn, fillRate);
     double yc = pow(yd, fillRate) * pow((double)yn, fillRate);
     if(xc > yc) return 1;
@@ -958,7 +957,9 @@ void Solver::reduceDB()
   int     i, j;
   nbReduceDB++;
 
-  // updateNDD();
+  updateNDD();
+  fillRate = getEMA(backedLevel) / getEMA(conflictLevel);
+  // printf("##### %lf / %lf = %lf\n", getEMA(backedLevel), getEMA(conflictLevel), fillRate);
   sort(learnts, reduceDB_lt(ca));
 
   // We have a lot of "good" clauses, it is difficult to compare them. Keep more !
@@ -1105,7 +1106,7 @@ lbool Solver::search(int nof_conflicts)
 	    lbdQueue.push(nblevels);
 	    sumLBD += nblevels;
  
-
+	    updateEMA(backedLevel, (double) backtrack_level);
             cancelUntil(backtrack_level);
 
             if (certifiedUNSAT) {
@@ -1144,7 +1145,7 @@ lbool Solver::search(int nof_conflicts)
 	    if(incremental) { // DO NOT BACKTRACK UNTIL 0.. USELESS
 	      bt = (decisionLevel()<assumptions.size()) ? decisionLevel() : assumptions.size();
 	    }
-	    updateEMA(conflictLevel, (double) bt);
+	    updateEMA(backedLevel, (double) bt);
 	    cancelUntil(bt);
 	    return l_Undef; }
 
