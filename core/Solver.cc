@@ -922,8 +922,8 @@ struct reduceDB_lt {
     int yd = ca[y].lbd();
     int xn = ca[x].ndd();
     int yn = ca[y].ndd();
-    double xc = pow(xd, fillRate) * pow((double)xn, fillRate);
-    double yc = pow(yd, fillRate) * pow((double)yn, fillRate);
+    double xc = pow(xd, (1-fillRate)) * pow((double)xn, fillRate);
+    double yc = pow(yd, (1-fillRate)) * pow((double)yn, fillRate);
     if(xc > yc) return 1;
     if(xc < yc) return 0;
     double xa = ca[x].activity();
