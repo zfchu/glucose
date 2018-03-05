@@ -176,7 +176,7 @@ protected:
     long curRestart;
     // Helper structures:
     //
-    struct VarData { CRef reason; int level; unsigned int depends; };
+    struct VarData { CRef reason; int level; unsigned int dependsH; unsigned int dependsL; };
     static inline VarData mkVarData(CRef cr, int l){ VarData d = {cr, l, 0}; return d; }
 
     struct Watcher {
@@ -322,7 +322,8 @@ protected:
     uint32_t abstractLevel    (Var x) const; // Used to represent an abstraction of sets of decision levels.
     CRef     reason           (Var x) const;
     int      level            (Var x) const;
-    int      depends          (Var x) const;
+    int      dependsH         (Var x) const;
+    int      dependsL         (Var x) const;
     double   progressEstimate ()      const; // DELETE THIS ?? IT'S NOT VERY USEFUL ...
     bool     withinBudget     ()      const;
     inline bool isSelector(Var v) {return (incremental && v>nbVarsInitialFormula);}
@@ -356,7 +357,8 @@ protected:
 
 inline CRef Solver::reason(Var x) const { return vardata[x].reason; }
 inline int  Solver::level (Var x) const { return vardata[x].level; }
-inline int  Solver::depends(Var x) const { return vardata[x].depends; }
+inline int  Solver::dependsH(Var x) const { return vardata[x].dependsH; }
+inline int  Solver::dependsL(Var x) const { return vardata[x].dependsL; }
 
 inline void Solver::insertVarOrder(Var x) {
     if (!order_heap.inHeap(x) && decision[x]) order_heap.insert(x); }

@@ -134,11 +134,11 @@ class Clause {
       unsigned learnt    : 1;
       unsigned has_extra : 1;
       unsigned reloced   : 1;
-      unsigned lbd       : 18;          // 26 (-8)
-      unsigned ndd       : 12;
+      unsigned lbd       : 26;
+      unsigned ndd       : 32;
       unsigned canbedel  : 1;
-      unsigned size      : 30;	        // 32(-2)
-      unsigned szWithoutSelectors : 30; // 32(-2)
+      unsigned size      : 32;
+      unsigned szWithoutSelectors : 32;
 
     }                            header;
     union { Lit lit; float act; uint32_t abs; CRef rel; } data[0];

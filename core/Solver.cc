@@ -404,8 +404,12 @@ inline unsigned int Solver::computeNDD(const Clause &c) {
   int a = 0;
   for (int i = 0; i < c.size(); i ++) {
     Lit l = c[i];
-    unsigned int bits = vardata[var(l)].depends;
-    for (int j = 0; j < 64; j++) a += (bits & 1 << j) ? 1 : 0;
+    unsigned int bitsH = vardata[var(l)].dependsH;
+    unsigned int bitsL = vardata[var(l)].dependsL;
+    for (int j = 0; j < 64; j++) {
+      a += (bitsH & 1 << j) ? 1 : 0;
+      a += (bitsL & 1 << j) ? 1 : 0;
+    }
   }
   return a;
 }
@@ -922,8 +926,8 @@ struct reduceDB_lt {
     int yd = ca[y].lbd();
     int xn = ca[x].ndd();
     int yn = ca[y].ndd();
-    double xc = pow(xd, (1-fillRate)) * pow((double)xn, fillRate);
-    double yc = pow(yd, (1-fillRate)) * pow((double)yn, fillRate);
+    double xc = pow(xd, 1-fillRate) * pow((double)xn, fillRate);
+    double yc = pow(yd, 1-fillRate) * pow((double)yn, fillRate);
     if(xc > yc) return 1;
     if(xc < yc) return 0;
     double xa = ca[x].activity();
@@ -1460,13 +1464,21 @@ void Solver::updateNDD()
   for (int i = 0; i < e; i++) {
     Var x  = var(trail[i]);
     CRef c = vardata[x].reason;
-    if (c != CRef_Undef || 1)
-      vardata[x].depends = vardata[x].level % 64;
+    vardata[x].dependsH = 0;
+    vardata[x].dependsL = 0;
+    if (c == CRef_Undef) {
+      int o = vardata[x].level % 128;
+      if (64 <= o)
+	vardata[x].dependsL = 1 << (o - 64);
+      else
+	vardata[x].dependsL = 1 << o;
+    }
     else {
       Clause& cls = ca[c];
-      vardata[x].depends = 0;
-      for (int j = 0; j < cls.size(); j++)
-	vardata[x].depends |= vardata[var(cls[j])].depends;
+      for (int j = 0; j < cls.size(); j++) {
+	vardata[x].dependsH |= vardata[var(cls[j])].dependsH;
+	vardata[x].dependsL |= vardata[var(cls[j])].dependsL;
+      }
     }
   }
 }
