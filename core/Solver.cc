@@ -1469,7 +1469,7 @@ void Solver::updateNDD()
     if (c == CRef_Undef) {
       int o = vardata[x].level % 128;
       if (64 <= o)
-	vardata[x].dependsL = 1 << (o - 64);
+	vardata[x].dependsH = 1 << (o - 64);
       else
 	vardata[x].dependsL = 1 << o;
     }
