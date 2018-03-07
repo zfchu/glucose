@@ -920,14 +920,14 @@ struct reduceDB_lt {
     if(xs > 2 && ys ==2) return 1;  //     if(ca[x].size()> 2 && ca[y].size()==2) return 1;
     if(ys > 2 && xs ==2) return 0;  //     if(ca[y].size()>2 && ca[x].size()==2) return 0;
     if(xs == 2 && ys ==2) return 0; //     if(ca[x].size()==2 && ca[y].size()==2) return 0;
-    // if(xd > yd) return 1;	    //     if(ca[x].lbd()> ca[y].lbd()) return 1;
-    // if(xd < yd) return 0;	    //     if(ca[x].size()==2 && ca[y].size()==2) return 0;
     int xd = ca[x].lbd();
     int yd = ca[y].lbd();
+    // if(xd > yd) return 1;	    //     if(ca[x].lbd()> ca[y].lbd()) return 1;
+    // if(xd < yd) return 0;	    //     if(ca[x].size()==2 && ca[y].size()==2) return 0;
     int xn = ca[x].ndd();
     int yn = ca[y].ndd();
-    double xc = pow(xd, 1-fillRate) * pow((double)xn, fillRate);
-    double yc = pow(yd, 1-fillRate) * pow((double)yn, fillRate);
+    double xc = pow(xn, 1-fillRate) * pow(xd, fillRate);
+    double yc = pow(yn, 1-fillRate) * pow(yd, fillRate);
     if(xc > yc) return 1;
     if(xc < yc) return 0;
     double xa = ca[x].activity();
