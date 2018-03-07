@@ -411,7 +411,18 @@ inline unsigned int Solver::computeNDD(const Clause &c) {
       a += (bitsL & 1 << j) ? 1 : 0;
     }
   }
-  return a;
+  /*
+  if (a == 0) {
+    printf(">>>> size= %d\n", c.size());
+    for (int i = 0; i < c.size(); i ++) {
+      Lit l = c[i];
+      printf("lit[%d] = %d(%d)\n", i, (int)var(l)), level(var(l));
+      //unsigned int bitsH = vardata[var(l)].dependsH;
+      //unsigned int bitsL = vardata[var(l)].dependsL;
+    }
+  }
+  */
+  return a == 0 ? 1 : a;
 }
 
 /******************************************************************
@@ -554,7 +565,6 @@ void Solver::analyze(CRef confl, vec<Lit>& out_learnt,vec<Lit>&selectors, int& o
 	    // seems to be interesting : keep it for the next round
 	    c.setLBD(nblevels); // Update it
 	  }
-	  c.setNDD(computeNDD(c));
 	}
 #endif
 
@@ -926,8 +936,9 @@ struct reduceDB_lt {
     // if(xd < yd) return 0;	    //     if(ca[x].size()==2 && ca[y].size()==2) return 0;
     int xn = ca[x].ndd();
     int yn = ca[y].ndd();
-    double xc = pow(xn, 1-fillRate) * pow(xd, fillRate);
-    double yc = pow(yn, 1-fillRate) * pow(yd, fillRate);
+    // printf("size=%d, lbd=%d, ndd=%d\n", xs, xd, xn);
+    int xc = (int) sqrt(pow(xn, 1-fillRate) * pow(xd, fillRate));
+    int yc = (int) sqrt(pow(yn, 1-fillRate) * pow(yd, fillRate));
     if(xc > yc) return 1;
     if(xc < yc) return 0;
     double xa = ca[x].activity();
@@ -1125,7 +1136,6 @@ lbool Solver::search(int nof_conflicts)
             }else{
                 CRef cr = ca.alloc(learnt_clause, true);
 		ca[cr].setLBD(nblevels);
-		ca[cr].setNDD(computeLBD(ca[cr]));
 		ca[cr].setSizeWithoutSelectors(szWoutSelectors);
 		if(nblevels<=2) nbDL2++; // stats
 		if(ca[cr].size()==2) nbBin++; // stats
@@ -1460,8 +1470,10 @@ void Solver::garbageCollect()
 
 void Solver::updateNDD()
 {
+  int i;
   int e = trail.size()-1;
-  for (int i = 0; i < e; i++) {
+  // update literal dependencies
+  for (i = 0; i < e; i++) {
     Var x  = var(trail[i]);
     CRef c = vardata[x].reason;
     vardata[x].dependsH = 0;
@@ -1480,5 +1492,17 @@ void Solver::updateNDD()
 	vardata[x].dependsL |= vardata[var(cls[j])].dependsL;
       }
     }
+  }
+  // update learnt ndd fields
+  for (i = 0; i < learnts.size(); i++){
+    Clause& c = ca[learnts[i]];
+    int n = computeNDD(c);
+    /*
+    if (n == 0) {
+      printf ("i = %d\n", i);
+      exit(0);
+    }
+    */
+    c.setNDD(n);
   }
 }
