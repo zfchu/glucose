@@ -937,8 +937,8 @@ struct reduceDB_lt {
     int xn = ca[x].ndd();
     int yn = ca[y].ndd();
     // printf("size=%d, lbd=%d, ndd=%d\n", xs, xd, xn);
-    int xc = (int) (1.443 * log(pow(xn, 1-fillRate) * pow(xd, fillRate)));
-    int yc = (int) (1.443 * log(pow(yn, 1-fillRate) * pow(yd, fillRate)));
+    double xc = log(pow(xn, 1-fillRate) * pow(xd, fillRate));
+    double yc = log(pow(yn, 1-fillRate) * pow(yd, fillRate));
     if(xc > yc) return 1;
     if(xc < yc) return 0;
     double xa = ca[x].activity();
