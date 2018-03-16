@@ -343,8 +343,8 @@ protected:
         return (int)(drand(seed) * size); }
 
   // 2018-02-NDD-altitude
-  struct EMA conflictLevel = { 0, (double) 1/ (double) 16384.0 };
-  struct EMA backedLevel   = { 0, (double) 1/ (double) 16384.0 };
+  struct EMA conflictLevel = { 0, (double) 1/ (double) 512.0 }; // <- 16384.0
+  struct EMA backedLevel   = { 0, (double) 1/ (double) 512.0 }; // <- 16384.0
   inline void updateEMA(struct EMA &d, double x) { d.value = d.rate * x + (1 - d.rate) * d.value; }
   inline double getEMA(struct EMA d) { return d.value; }
 
